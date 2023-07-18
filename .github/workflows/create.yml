@@ -36,10 +36,10 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH dnsmasq-china-list --depth 1
 
     - name: Compile
-      run: cd dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+      run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
 
     - name: Copy files
-      run: cp -rf dnsmasq-china-list/*.domain.smartdns.conf ./
+      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
       
     - name: Commit & Push changes
       uses: actions-js/push@master
