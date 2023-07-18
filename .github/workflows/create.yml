@@ -1,8 +1,8 @@
 name: Build SmartDNS Conf
 
 on:
-  repository_dispatch:
-  workflow_dispatch:
+  schedule:
+    - cron: "33 3 * * 3"
 
 env:
   REPO_URL: https://github.com/felixonmars/dnsmasq-china-list
