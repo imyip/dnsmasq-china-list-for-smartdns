@@ -44,7 +44,7 @@ jobs:
     - name: Commit & Push changes
       uses: actions-js/push@master
       with:
-        github_token: ${{ secrets.TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
