@@ -37,8 +37,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
       with:
-        persist-credentials: false
-        fetch-depth: 0
+         token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Copy files
       run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
@@ -46,10 +45,10 @@ jobs:
     - name: Commit & Push changes
       uses: actions-js/push@master
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN  }}
+         github_token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
       with:
-        retain_days: 1
-        keep_minimum_runs: 3
+         retain_days: 1
+         keep_minimum_runs: 3
