@@ -36,9 +36,10 @@ jobs:
       run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
 
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@master
       with:
-        token: ${{ secrets.GITHUB_TOKEN  }}
+        persist-credentials: false
+        fetch-depth: 0
 
     - name: Copy files
       run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
