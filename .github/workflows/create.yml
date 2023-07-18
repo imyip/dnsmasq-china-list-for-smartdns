@@ -27,9 +27,8 @@ jobs:
         sudo chown $USER:$GROUPS /workdir
 
     - name: Clone source code
-      working-directory: /workdir
       run: |
-        df -hT $PWD
+        cd /workdir
         git clone $REPO_URL -b $REPO_BRANCH dnsmasq-china-list --depth 1
 
     - name: Compile
