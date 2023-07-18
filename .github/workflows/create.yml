@@ -38,7 +38,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN  }}
+        token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Copy files
       run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
