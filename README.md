@@ -1,0 +1,1 @@
+[![Build SmartDNS Conf](https://github.com/imyip/dnsmasq-china-list-for-smartdns/actions/workflows/create.yml/badge.svg?branch=main&event=schedule)](https://github.com/imyip/dnsmasq-china-list-for-smartdns/actions/workflows/create.yml)
