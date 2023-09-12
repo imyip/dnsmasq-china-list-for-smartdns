@@ -1,6 +1,7 @@
 name: Build SmartDNS Conf
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "33 3 * * 3"
 
