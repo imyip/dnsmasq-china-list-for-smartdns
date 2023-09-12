@@ -32,7 +32,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH dnsmasq-china-list --depth 1
 
     - name: Compile
-      run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+      run: cd /workdir/dnsmasq-china-list && make SERVER=127.0.0.1:6053 SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
 
     - name: Checkout
       uses: actions/checkout@master
