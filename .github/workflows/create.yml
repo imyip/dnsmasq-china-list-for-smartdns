@@ -42,7 +42,6 @@ jobs:
         ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
         printf "%s" "$SSH_KEY" > ~/.ssh/key
         chmod 600 ~/.ssh/key 
-        ssh-keygen -l -f ~/.ssh/key
 
     - name: Clone source code
       run: |
@@ -77,7 +76,7 @@ jobs:
       run: |
         scp -i ~/.ssh/key /workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf "root@[$MACHINE_IP]:/root/smartdns/conf.d/"
         scp -i ~/.ssh/key /workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf "root@[$MACHINE_IP]:/root/smartdns/conf.d/"
-        ssh -i ~/.ssh/key "github@$MACHINE_IP" "sudo docker restart smartdns"
+        ssh -i ~/.ssh/key "root@$MACHINE_IP" "sudo docker restart smartdns"
         rm -rf ~/.ssh/key 
 
     - name: Delete workflow runs
