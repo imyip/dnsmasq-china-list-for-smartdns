@@ -23,7 +23,6 @@ jobs:
         sudo -E apt-get -qq install make
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        sudo -E apt-get -qq openssh-client openssl
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
@@ -39,6 +38,7 @@ jobs:
         MACHINE_IP: ${{ secrets.MACHINE_IP }}
       run: |
         mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
         ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
         printf "%s" "$SSH_KEY" > ~/.ssh/key
         chmod 600 ~/.ssh/key 
