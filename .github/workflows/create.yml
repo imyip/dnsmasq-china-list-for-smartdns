@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Initialization environment
@@ -26,6 +26,22 @@ jobs:
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+
+    - name: Tailscale
+      uses: tailscale/github-action@v2
+      with:
+        authkey: ${{ secrets.TS_AUTH_KEY }}
+        statedir: /tmp/tailscale-state/
+
+    - name: Add SSH key
+      env:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        MACHINE_IP: ${{ secrets.MACHINE_IP }}
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
+        printf "%s" "$SSH_KEY" > ~/.ssh/key
+        chmod 600 ~/.ssh/key 
 
     - name: Clone source code
       run: |
@@ -53,6 +69,13 @@ jobs:
       uses: actions-js/push@master
       with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
+
+    - name: Rsync now
+      run: |
+        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf "github@[$MACHINE_IP]:/root/smartdns/conf.d/"
+        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf "github@[$MACHINE_IP]:/root/smartdns/conf.d/"
+        ssh -i ~/.ssh/key "github@$MACHINE_IP" "sudo docker restart smartdns"
+        rm -rf ~/.ssh/key 
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
