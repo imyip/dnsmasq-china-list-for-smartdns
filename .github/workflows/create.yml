@@ -31,7 +31,6 @@ jobs:
       uses: tailscale/github-action@v2
       with:
         authkey: ${{ secrets.TS_AUTH_KEY }}
-        statedir: /tmp/tailscale-state/
 
     - name: Add SSH key
       env:
@@ -71,9 +70,11 @@ jobs:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Rsync now
+      env:
+        MACHINE_IP: ${{ secrets.MACHINE_IP }}
       run: |
-        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf "github@[$MACHINE_IP]:/root/smartdns/conf.d/"
-        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf "github@[$MACHINE_IP]:/root/smartdns/conf.d/"
+        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf "root@[$MACHINE_IP]:/root/smartdns/conf.d/"
+        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf "root@[$MACHINE_IP]:/root/smartdns/conf.d/"
         ssh -i ~/.ssh/key "github@$MACHINE_IP" "sudo docker restart smartdns"
         rm -rf ~/.ssh/key 
 
