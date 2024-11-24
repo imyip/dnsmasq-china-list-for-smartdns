@@ -43,7 +43,6 @@ jobs:
         chmod 700 ~/.ssh
         ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
         printf "%s" "$SSH_KEY" > ~/.ssh/key
-        chmod 600 ~/.ssh/key 
 
     - name: Clone source code
       run: |
