@@ -73,7 +73,7 @@ jobs:
         target: ${{ secrets.TARGET }}
         
     - name: Restart smartdns
-      uses: appleboy/ssh-action@v1.2.0
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.MACHINE_IP }}
         username: ${{ secrets.USERNAME }}
