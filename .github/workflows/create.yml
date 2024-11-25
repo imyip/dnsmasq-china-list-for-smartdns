@@ -34,16 +34,6 @@ jobs:
         oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
         tags: tag:ci
 
-    - name: Add SSH key
-      env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
-        MACHINE_IP: ${{ secrets.MACHINE_IP }}
-      run: |
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
-        ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
-        printf "%s" "$SSH_KEY" > ~/.ssh/key
-
     - name: Clone source code
       run: |
         cd /workdir
@@ -71,14 +61,16 @@ jobs:
       with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
 
-    - name: Rsync now
-      env:
-        MACHINE: ${{ secrets.MACHINE }}
-      run: |
-        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf "$MACHINE:/root/smartdns/conf.d/"
-        scp -i ~/.ssh/key /workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf "$MACHINE:/root/smartdns/conf.d/"
-        ssh -i ~/.ssh/key "$MACHINE" "sudo docker restart smartdns"
-        rm -rf ~/.ssh/key 
+    - name: copy file via ssh key
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.MACHINE_IP }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "/workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf,/workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf"
+        target: ${{ secrets.TARGET }}
+    
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
