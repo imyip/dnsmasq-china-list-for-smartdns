@@ -3,7 +3,7 @@ name: Build SmartDNS Conf
 on:
   workflow_dispatch:
   schedule:
-    - cron: "33 3 * * *"
+    - cron: "33 0 * * *"
 
 env:
   REPO_URL: https://github.com/felixonmars/dnsmasq-china-list
@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - name: Initialization environment
