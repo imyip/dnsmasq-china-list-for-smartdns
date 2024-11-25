@@ -62,13 +62,14 @@ jobs:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: copy file via ssh key
-      uses: appleboy/scp-action@v0.1.7
+      uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.MACHINE_IP }}
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
+        overwrite: true
         key: ${{ secrets.SSH_KEY }}
-        source: "/workdir/dnsmasq-china-list/accelerated-domains.china.domain.smartdns.conf,/workdir/dnsmasq-china-list/gfwlist.domain.smartdns.conf"
+        source: "./accelerated-domains.china.domain.smartdns.conf,./gfwlist.domain.smartdns.conf"
         target: ${{ secrets.TARGET }}
     
 
