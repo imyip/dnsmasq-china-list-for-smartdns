@@ -38,6 +38,7 @@ jobs:
       run: |
         cd /workdir
         git clone $REPO_URL -b $REPO_BRANCH dnsmasq-china-list --depth 1
+        mkdir -p dnsmasq-china-list2 && cp -rf dnsmasq-china-list/* dnsmasq-china-list2/
 
     - name: Compile
       run: cd /workdir/dnsmasq-china-list && make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
@@ -49,7 +50,7 @@ jobs:
       run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/gfwlist.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw -address \#6|" gfwlist.txt > gfwlist.domain.smartdns.conf
 
     - name: Compile adguard rule
-      run: cd /workdir/dnsmasq-china-list && make SERVER="https://dns.alidns.com/dns-query quic://dns.alidns.com tls://dns.alidns.com"  adguardhome
+      run: cd /workdir/dnsmasq-china-list2 && make SERVER="https://dns.alidns.com/dns-query quic://dns.alidns.com tls://dns.alidns.com"  adguardhome
     
     - name: Checkout
       uses: actions/checkout@master
@@ -57,7 +58,7 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Copy files
-      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./ && cp -rf /workdir/dnsmasq-china-list/accelerated-domains.china.adguardhome.conf ./
+      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./ && cp -rf /workdir/dnsmasq-china-list2/accelerated-domains.china.adguardhome.conf ./
       
     - name: Commit & Push changes
       uses: actions-js/push@master
