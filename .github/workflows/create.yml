@@ -48,13 +48,16 @@ jobs:
     - name: Compile again again
       run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/gfwlist.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw -address \#6|" gfwlist.txt > gfwlist.domain.smartdns.conf
 
+    - name: Compile adguard rule
+      run: cd /workdir/dnsmasq-china-list && make SERVER="https://dns.alidns.com/dns-query quic://dns.alidns.com tls://dns.alidns.com"  adguardhome
+    
     - name: Checkout
       uses: actions/checkout@master
       with:
          token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Copy files
-      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./
+      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./ && cp -rf /workdir/dnsmasq-china-list/accelerated-domains.china.adguardhome.conf ./
       
     - name: Commit & Push changes
       uses: actions-js/push@master
