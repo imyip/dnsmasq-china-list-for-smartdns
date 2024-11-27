@@ -7,7 +7,7 @@ on:
 
 jobs:
   run-for-specific-user:
-    if: github.actor == 'bot'
+    # if: github.actor == 'bot'
     runs-on: self-host
 
     steps:
