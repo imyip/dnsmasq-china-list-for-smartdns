@@ -8,7 +8,7 @@ on:
 jobs:
   run-for-specific-user:
     # if: github.actor == 'bot'
-    runs-on: self-host
+    runs-on: self-hosted
 
     steps:
       - name: Check Push User
