@@ -46,6 +46,7 @@ jobs:
       uses: actions-js/push@master
       with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
+         author_name: bot
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
