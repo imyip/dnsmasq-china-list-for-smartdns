@@ -47,6 +47,7 @@ jobs:
       with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
          author_name: bot
+         coauthor_name: bot
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
