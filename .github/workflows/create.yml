@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Initialization environment
-      run: sudo apt update && sudo apt install make && sudo mkdir -p /workdir
+      run: sudo -E apt -qq update && sudo -E apt -qq install make && sudo mkdir -p /workdir && sudo chown $USER:$GROUPS /workdir
 
     - name: Tailscale
       uses: tailscale/github-action@v2
