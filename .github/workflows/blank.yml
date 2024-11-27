@@ -1,0 +1,48 @@
+name: Sync Conf To Client
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  run-for-specific-user:
+    if: github.actor == 'github-actions[bot]'
+    runs-on: self-host
+
+    steps:
+      - name: Check Push User
+        run: echo "This job was triggered by ${{ github.actor }}"
+
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+           token: ${{ secrets.GITHUB_TOKEN  }}
+
+      - name: Copy file to the client 
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.MACHINE_IP }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          overwrite: true
+          key: ${{ secrets.SSH_KEY }}
+          source: "./accelerated-domains.china.domain.smartdns.conf,./gfwlist.domain.smartdns.conf"
+          target: ${{ secrets.TARGET }}
+          
+      - name: Restart smartdns
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.MACHINE_IP }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: docker restart smartdns
+  
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 2
