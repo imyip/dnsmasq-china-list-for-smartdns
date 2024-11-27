@@ -17,13 +17,6 @@ jobs:
     - name: Initialization environment
       run: sudo -E apt -qq update && sudo -E apt -qq install make && sudo mkdir -p /workdir && sudo chown $USER:$GROUPS /workdir
 
-    - name: Tailscale
-      uses: tailscale/github-action@v2
-      with:
-        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-        tags: tag:ci
-
     - name: Clone source code
       run: |
         cd /workdir
@@ -47,32 +40,12 @@ jobs:
          token: ${{ secrets.GITHUB_TOKEN  }}
 
     - name: Copy files
-      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./ && cp -rf /workdir/dnsmasq-china-list/accelerated-domains.china.adguardhome.conf ./
+      run: cp -rf /workdir/dnsmasq-china-list/*.domain.smartdns.conf ./ && cp -rf /workdir/dnsmasq-china-list/*.china.adguardhome.conf ./
       
     - name: Commit & Push changes
       uses: actions-js/push@master
       with:
          github_token: ${{ secrets.GITHUB_TOKEN  }}
-
-    - name: Copy file to the target 
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.MACHINE_IP }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        overwrite: true
-        key: ${{ secrets.SSH_KEY }}
-        source: "./accelerated-domains.china.domain.smartdns.conf,./gfwlist.domain.smartdns.conf"
-        target: ${{ secrets.TARGET }}
-        
-    - name: Restart smartdns
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.MACHINE_IP }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: docker restart smartdns
 
     - name: Delete workflow runs
       uses: Mattraks/delete-workflow-runs@v2
