@@ -41,6 +41,29 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: docker restart smartdns
+
+      - name: Add global nameserver
+        run: sed '1i\h3://dns.cloudflare.com/dns-query\nh3://dns.google/dns-query' ./accelerated-domains.china.adguardhome.conf > ./dns.conf
+
+      - name: Copy file to the server 
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          overwrite: true
+          key: ${{ secrets.SSH_KEY2 }}
+          source: "./dns.conf"
+          target: ${{ secrets.TARGET2 }}
+          
+      - name: Restart adguardhome
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSH_KEY2 }}
+          script: docker restart adguardhome
   
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v2
