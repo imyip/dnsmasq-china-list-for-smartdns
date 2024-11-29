@@ -22,25 +22,25 @@ jobs:
         with:
            token: ${{ secrets.GITHUB_TOKEN  }}
 
-      - name: Copy file to the client 
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.MACHINE_IP }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          overwrite: true
-          key: ${{ secrets.SSH_KEY }}
-          source: "./accelerated-domains.china.domain.smartdns.conf,./gfwlist.domain.smartdns.conf"
-          target: ${{ secrets.TARGET }}
+      # - name: Copy file to the client 
+      #   uses: appleboy/scp-action@master
+      #   with:
+      #     host: ${{ secrets.MACHINE_IP }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     overwrite: true
+      #     key: ${{ secrets.SSH_KEY }}
+      #     source: "./accelerated-domains.china.domain.smartdns.conf,./gfwlist.domain.smartdns.conf"
+      #     target: ${{ secrets.TARGET }}
           
-      - name: Restart smartdns
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.MACHINE_IP }}
-          username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: docker restart smartdns
+      # - name: Restart smartdns
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.MACHINE_IP }}
+      #     username: ${{ secrets.USERNAME }}
+      #     port: ${{ secrets.PORT }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: docker restart smartdns
 
       - name: Add global nameserver
         run: sed '1i\h3://dns.cloudflare.com/dns-query\nh3://dns.google/dns-query' ./accelerated-domains.china.adguardhome.conf > ./dns.conf
