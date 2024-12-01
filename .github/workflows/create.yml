@@ -32,7 +32,7 @@ jobs:
       run: cd /workdir/dnsmasq-china-list && wget https://raw.githubusercontent.com/imyip/Chnroute/master/dist/chnroute/gfwlist.txt -O gfwlist.txt && sed -e "s|\(.*\)|domain-rules /\1/ -speed-check-mode none -nameserver gfw -address \#6|" gfwlist.txt > gfwlist.domain.smartdns.conf
 
     - name: Compile adguard rule
-      run: cd /workdir/dnsmasq-china-list && make SERVER="h3://dns.alidns.com/dns-query tls://dns.alidns.com"  adguardhome
+      run: cd /workdir/dnsmasq-china-list && make SERVER="h3://dns.alidns.com/dns-query quic://dns.alidns.com"  adguardhome
     
     - name: Checkout
       uses: actions/checkout@master
